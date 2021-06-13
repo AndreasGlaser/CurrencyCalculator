@@ -2,6 +2,7 @@ package de.andreas.assignment.repository;
 
 import de.andreas.assignment.dto.Currency;
 import de.andreas.assignment.dto.CurrencyShortName;
+import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
@@ -11,33 +12,10 @@ import java.util.Optional;
 import static de.andreas.assignment.dto.CurrencyShortName.*;
 
 @Repository
-public class CurrencyRepository {
+public interface CurrencyRepository extends CrudRepository<Currency, String> {
 
-    final List<Currency> currencies = List.of(
-            new Currency(EUR, "Euro"),
-            new Currency(USD, "US Dollar"),
-            new Currency(HUF, "Hungarian forint"),
-            new Currency(CZK, "Czech koruna"),
-            new Currency(GBP, "Pound sterling")
-    );
+	@Override
+	List<Currency> findAll();
 
-    public List<Currency> loadCurrencies()
-    {
-        return this.currencies;
-    }
-
-    public Optional<Currency> loadCurrency(CurrencyShortName shortName)
-    {
-        return this.currencies.stream().filter(currency -> currency.getShortName() == shortName).findFirst();
-    }
-
-    public void increaseCountTo(CurrencyShortName shortName)
-    {
-        currencies.stream().filter(currency -> currency.getShortName() == shortName).findFirst().ifPresent(Currency::increaseCountTo);
-    }
-
-    public void increaseCountFrom(CurrencyShortName shortName)
-    {
-        currencies.stream().filter(currency -> currency.getShortName() == shortName).findFirst().ifPresent(Currency::increaseCountFrom);
-    }
+	Optional<Currency> findCurrencyByShortName(CurrencyShortName shortName);
 }

@@ -2,8 +2,7 @@ package de.andreas.assignment.controller;
 
 import de.andreas.assignment.dto.Currency;
 import de.andreas.assignment.dto.CurrencyShortName;
-import de.andreas.assignment.repository.CurrencyRepository;
-import de.andreas.assignment.repository.ExchangeRateRepository;
+import de.andreas.assignment.service.CurrencyService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,23 +16,23 @@ import java.util.List;
 @RequestMapping("/currencies")
 public class CurrencyController {
 
-    final CurrencyRepository currencyRepository;
+    final CurrencyService currencyService;
 
-    public CurrencyController(CurrencyRepository currencyRepository)
+    public CurrencyController(CurrencyService currencyService)
     {
-        this.currencyRepository = currencyRepository;
+        this.currencyService = currencyService;
     }
 
     @GetMapping
     public ResponseEntity<List<Currency>> getCurrencies()
     {
-        return new ResponseEntity<>(currencyRepository.loadCurrencies(), HttpStatus.OK);
+        return new ResponseEntity<>(currencyService.findAll(), HttpStatus.OK);
     }
 
     @GetMapping("/{currencyShortName}")
     public ResponseEntity<Currency> currencyRate(@PathVariable CurrencyShortName currencyShortName)
     {
-        return currencyRepository.loadCurrency(currencyShortName)
+        return currencyService.findByShortName(currencyShortName)
                 .map(currency -> new ResponseEntity<>(currency, HttpStatus.OK))
                 .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }

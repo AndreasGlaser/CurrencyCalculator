@@ -1,16 +1,24 @@
 package de.andreas.assignment.dto;
 
-import lombok.Getter;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
+import lombok.*;
+
+import javax.persistence.*;
 
 @RequiredArgsConstructor
+@NoArgsConstructor
+@Entity
 public class Currency {
+
+	@Getter
+	@Setter
+	@Id
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	private Long id;
 
     @Getter
     @Setter
     @NonNull
+	@Enumerated(EnumType.STRING)
     private CurrencyShortName shortName;
     @Getter
     @Setter
@@ -18,12 +26,12 @@ public class Currency {
     private String name;
     @Getter
     @Setter
-    private long countOfExchangedTo = 0;
+    private Long countOfExchangedTo = 0L;
     @Getter
     @Setter
-    private long countOfExchangedFrom = 0;
+    private Long countOfExchangedFrom = 0L;
 
-    public void increaseCountTo()
+	public void increaseCountTo()
     {
         this.countOfExchangedTo += 1;
     }
